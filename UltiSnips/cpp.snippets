@@ -8,6 +8,31 @@ int32_main() {
 }
 endsnippet
 
+snippet preinv "inv for mod"
+void pre_inv(int n) {
+	inv[1] = 1;
+	for (int i = 2; i <= n; ++ i) {
+		int a = mod / i, b = mod % i;
+		inv[i] = (1ll * inv[b] * (-a) % mod + mod) % mod;
+	}
+}
+endsnippet
+
+snippet Comb
+const int U = 2e5;
+int fr[U + 5], rf[U + 5];
+void init_comb() {
+	fr[0] = 1;
+	for (int i = 1; i <= U; ++ i) fr[i] = 1ll * f[i - 1] * i % mod;
+	rf[U] = qpow(fr[U], mod - 2, mod);
+	for (int i = U; i; -- i) rf[i - 1] = 1ll * rf[i] * i % mod;
+}
+ll C(int n, int m) {
+	if (m < 0 || m > n) return 0;
+	return 1ll * fr[n] * rf[m] % mod * rf[n - m] % mod;
+}
+endsnippet
+
 snippet testcase
 int t; scanf("d", &t);
 while (t --) solve();

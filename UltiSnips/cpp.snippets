@@ -52,6 +52,13 @@ int qpow(int x, int y, int mod) {
 }
 endsnippet
 
+
+snippet debug
+#ifdef LOCAL
+  $1
+#endif
+endsnippet
+
 snippet binmul
 ll binmul(ll a, ll b, ll m) {
 	unsigned ll c = (unsigned ll) a * b - (ll)((long double) a / m * b + 0.5L) * m;
@@ -59,3 +66,50 @@ ll binmul(ll a, ll b, ll m) {
 	return c + m;
 }
 endsnippet
+
+snippet miller
+bool millerRabin(int n) {
+  if (n < 3 || n % 2 == 0) return n == 2;
+  int a = n - 1, b = 0;
+  while (a % 2 == 0) a /= 2, ++b;
+  for (int i = 1, j; i <= 11; ++i) {
+    int x = rand() % (n - 2) + 2, v = qpow(x, a, n);
+    if (v == 1) continue;
+    for (j = 0; j < b; ++j) {
+      if (v == n - 1) break;
+      v = (ll)v * v % n;
+    }
+    if (j >= b) return 0;
+  }
+  return 1;
+}
+endsnippet
+
+snippet sieve
+inline void sieve() {
+  phi[1] = 1;
+  for (int i = 2; i < N; ++ i) {
+    if (!prime[i]) prime[++tot] = i;
+    for (int j = 1; j <= tot && 1ll * i * prime[j] < N; ++ j) {
+      prime[i * prime[j]] = 1;
+      if (i % prime[j] == 0) break;
+    }
+  }
+}
+endsnippet
+
+snippet fread
+char nc() {
+  static char buf[1<<20], *p1 = buf, *p2 = buf;
+  return p1 == p2 && (p2 = (p1 = buf) + fread(buf, 1, 1 << 20, stdin), p1 == p2) ? EOF : *p1 ++;
+}
+
+int read() {
+  int x = 0, ch = nc();
+  for (; ch < '0' || ch > '9'; ch = nc());
+  for (; ch >= '0' && ch <= '9'; ch = nc())
+    x = (x << 1) + (x << 3) + (ch ^ 48);
+  return x;
+}
+endsnippet
+
